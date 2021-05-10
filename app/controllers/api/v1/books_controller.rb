@@ -7,20 +7,20 @@ module Api
             # @get: /api/v1/books.json
             def index
                 books = Book.all
-                render json: BooksSerializer.new(books).serialized_json
+                render json: BookSerializer.new(books).serialized_json
             end
 
             # @get: /api/v1/books/:slug
             def show
                 books = Book.find_by(slug: params[:slug])
-                render json: BooksSerializer.new(books).serialized_json
+                render json: BookSerializer.new(books).serialized_json
             end
 
             # @post: /api/v1/books
             def create
                 book = Book.new(book_params)
                 if book.save
-                    render json: BooksSerializer.new(books).serialized_json
+                    render json: BookSerializer.new(books).serialized_json
                 else
                     render json: { error: book.errors.message }, status: 422
                 end
@@ -30,7 +30,7 @@ module Api
             def update
                 book = Book.find_by(slug: params[:slug])
                 if book.update(book_params)
-                    render json: BooksSerializer.new(books).serialized_json
+                    render json: BookSerializer.new(books).serialized_json
                 else
                     render json: { error: book.errors.message }, status: 422
                 end
