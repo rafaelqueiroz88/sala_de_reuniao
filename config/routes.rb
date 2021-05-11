@@ -6,6 +6,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :schedules, param: :slug
       resources :users, param: :slug
+      post "/login", to: "users#login"
+      get "/auto_login", to: "users#auto_login"
     end
   end
 
