@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :books, param: :slug
+      resources :schedules, param: :slug
       resources :users, param: :slug
     end
   end

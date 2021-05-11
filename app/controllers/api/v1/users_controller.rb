@@ -20,7 +20,7 @@ module Api
             def create
                 user = User.new(user_params)
                 if user.save
-                    render json: UserSerializer.new(user, options).serialized_json
+                    render json: UserSerializer.new(user).serialized_json
                 else
                     render json: { error: user.errors.message }, status: 422
                 end
@@ -37,7 +37,7 @@ module Api
             end
 
             # @delete: /api/v1/users/:slug
-            def update
+            def delete
                 user = User.find_by(slug: params[:slug])
                 if user.delete
                     head :no_content
@@ -53,7 +53,7 @@ module Api
             end
 
             def options
-                @options ||= { include %i[books] }
+                @options ||= { include: %i[schedules] }
             end
         end
     end

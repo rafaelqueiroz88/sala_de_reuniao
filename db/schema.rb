@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_10_163526) do
+ActiveRecord::Schema.define(version: 2021_05_11_003645) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,12 +18,25 @@ ActiveRecord::Schema.define(version: 2021_05_10_163526) do
   create_table "books", force: :cascade do |t|
     t.string "title"
     t.string "description"
-    t.integer "status"
-    t.datetime "hour"
+    t.string "status"
+    t.string "hour"
     t.bigint "user_id", null: false
+    t.string "slug"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_books_on_user_id"
+  end
+
+  create_table "schedules", force: :cascade do |t|
+    t.string "title"
+    t.string "description"
+    t.string "status"
+    t.string "hour"
+    t.bigint "user_id", null: false
+    t.string "slug"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_schedules_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -31,9 +44,11 @@ ActiveRecord::Schema.define(version: 2021_05_10_163526) do
     t.string "email"
     t.string "password"
     t.string "occupation"
+    t.string "slug"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   add_foreign_key "books", "users"
+  add_foreign_key "schedules", "users"
 end
