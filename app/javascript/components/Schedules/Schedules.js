@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Button } from 'react-bootstrap'
+import { useHistory } from 'react-router-dom'
 
 import Schedule from './Schedules/Schedule'
 import ModalLegend from './Schedules/ModalLegend'
@@ -10,6 +11,17 @@ import ScheduleModal from './Schedules/ScheduleModal'
 import CheckModal from './Schedules/CheckModal'
 
 const Schedules = () => {
+
+    let history = useHistory()
+
+    const token = localStorage.getItem('token')
+
+    if(token == null)
+        history.push('/')
+
+    const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    }
 
     const [schedules, setSchedules] = useState([])
     const [hour, setHour] = useState(0)
@@ -29,7 +41,7 @@ const Schedules = () => {
         today.setHours(-24 * (day - 1))
 
     useEffect(() => {
-        axios.get('/api/v1/schedules.json')
+        axios.get('/api/v1/schedules.json', config)
             .then(response => {
                 setSchedules(response.data.data)
             })
@@ -88,6 +100,12 @@ const Schedules = () => {
         setSchedules(Object.assign({}, schedules, {[e.target.name]: e.target.value}))
     }
 
+    const handleSignOut = (e) => {
+        e.preventDefault()
+        localStorage.clear('token')
+        history.push('/')
+    }
+
     const handleScheduleSubmit = (e) => {
         e.preventDefault()
 
@@ -136,11 +154,18 @@ const Schedules = () => {
                 </div>
             </div>
             <div className={"row pt-1"}>
-                <div className="col-xs-12 col-sm-12 col-md-2 offset-md-10 pb-2">
+                <div className="col-xs-4 col-sm-4 col-md-2 pb-2">
                     <Button className="btn btn-info" onClick={handleSetListModal}>
                         <i className="fas fa-table"></i> Ver Legenda
                     </Button>
                 </div>
+                <div className="col-xs-4 col-sm-4 col-md-2 offset-md-6 offset-xs-1 offset-sm-1 pb-2">
+                    <Button className="btn btn-danger" onClick={handleSignOut}>
+                        <i className="fas fa-sign-out-alt"></i> Sair
+                    </Button>
+                </div>
+            </div>
+            <div className={"row pt-1"}>
                 <div className={"table-responsive table-striped table-hover"}>
                     <table className={"table"}>
                         <thead>
