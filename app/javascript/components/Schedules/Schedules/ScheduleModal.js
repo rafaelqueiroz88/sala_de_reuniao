@@ -30,7 +30,7 @@ const ScheduleModal = (props) => {
                     <button className="btn btn-success">
                         <i className="far fa-save"></i> Agendar
                     </button>
-                    <Button className="btn btn-danger" onClick={props.handleCloseButton}>
+                    <Button className="btn btn-warning" onClick={props.handleCloseButton}>
                         <i className="far fa-times-circle"></i> Cancelar
                     </Button>
                 </Modal.Footer>

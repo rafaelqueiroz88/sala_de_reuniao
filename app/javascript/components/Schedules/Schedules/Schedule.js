@@ -14,7 +14,7 @@ const Schedule = (props) => {
                     06:00
                 </td>
                 <td>
-                    <Button className={"btn btn-outline-success btn-block"} onClick={props.handleSchedulerButton(`${date} 06:00`)} >
+                    <Button className={"btn btn-outline-success btn-block"} onClick={props.handleSetCheckModal} >
                         <i className="fas fa-clipboard-check"></i> Concluído
                     </Button>
                 </td>

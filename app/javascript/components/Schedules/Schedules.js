@@ -7,6 +7,7 @@ import ModalLegend from './Schedules/ModalLegend'
 import InfoModal from './Schedules/InfoModal'
 import CancelModal from './Schedules/CancelModal'
 import ScheduleModal from './Schedules/ScheduleModal'
+import CheckModal from './Schedules/CheckModal'
 
 const Schedules = () => {
 
@@ -15,6 +16,7 @@ const Schedules = () => {
     const [schedulerModal, setSchedulerModal] = useState(false)
     const [cancelModal, setCancelModal] = useState(false)
     const [infoModal, setInfoModal] = useState(false)
+    const [checkModal, setCheckModal] = useState(false)
     const [listModal, setListModal] = useState(false)
 
     /**
@@ -49,6 +51,11 @@ const Schedules = () => {
     const handleSetListModal = (e) => {
         e.preventDefault()
         setListModal(true)
+    }
+
+    const handleSetCheckModal = (e) => {
+        e.preventDefault()
+        setCheckModal(true)
     }
 
     const handleCancelModal = (e) => {
@@ -150,6 +157,7 @@ const Schedules = () => {
                             handleSchedulerButton={handleSchedulerButton}
                             handleCancelModal={handleCancelModal}
                             handleInfoModal={handleInfoModal}
+                            handleSetCheckModal={handleSetCheckModal}
                         />
                     </table>
                 </div>
@@ -166,6 +174,12 @@ const Schedules = () => {
 
             <CancelModal
                 cancelModal={cancelModal}
+                handleModalClose={handleModalClose}
+                handleCloseButton={handleCloseButton}
+            />
+
+            <CheckModal
+                checkModal={checkModal}
                 handleModalClose={handleModalClose}
                 handleCloseButton={handleCloseButton}
             />
