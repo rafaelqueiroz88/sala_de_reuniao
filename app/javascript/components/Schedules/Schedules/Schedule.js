@@ -14,10 +14,14 @@ const Schedule = (props) => {
                     06:00
                 </td>
                 <td>
-                    <Button className={"btn btn-outline-success btn-block"} onClick={props.handleSchedulerButton(`${date} 06:00`)} >Concluído</Button>
+                    <Button className={"btn btn-outline-success btn-block"} onClick={props.handleSchedulerButton(`${date} 06:00`)} >
+                        <i className="fas fa-clipboard-check"></i> Concluído
+                    </Button>
                 </td>
                 <td>
-                    <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${date + 1} 06:00`)} >Disponível</Button>
+                    <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${date + 1} 06:00`)} >
+                        <i className="fas fa-calendar-day"></i> Disponível
+                    </Button>
                 </td>
                 <td>
                     <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${date + 2} 06:00`)} >Disponível</Button>
@@ -50,7 +54,9 @@ const Schedule = (props) => {
             <tr>
                 <td>08:00</td>
                 <td>
-                    <Button className={"btn btn-outline-danger btn-block"} onClick={props.handleInfoModal} >Ocupada</Button>
+                    <Button className={"btn btn-outline-danger btn-block"} onClick={props.handleInfoModal} >
+                        <i className="fas fa-user-lock"></i> Ocupada
+                    </Button>
                 </td>
                 <td>
                     <Button className={"btn btn-outline-danger btn-block"} onClick={props.handleInfoModal} >Ocupada</Button>
@@ -86,7 +92,9 @@ const Schedule = (props) => {
             <tr>
                 <td>10:00</td>
                 <td>
-                    <Button className={"btn btn-warning btn-block"} onClick={props.handleCancelModal} >Agendado</Button>
+                    <Button className={"btn btn-warning btn-block"} onClick={props.handleCancelModal} > 
+                        <i className="fas fa-users"></i> Agendado
+                    </Button>
                 </td>
                 <td>
                     <Button className={"btn btn-outline-danger btn-block"} onClick={props.handleInfoModal} >Ocupada</Button>

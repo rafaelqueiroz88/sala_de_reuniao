@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import styled from 'styled-components'
-import { Button, Modal } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Button } from 'react-bootstrap'
 
 import Schedule from './Schedules/Schedule'
+import ModalLegend from './Schedules/ModalLegend'
+import InfoModal from './Schedules/InfoModal'
+import CancelModal from './Schedules/CancelModal'
+import ScheduleModal from './Schedules/ScheduleModal'
 
 const Schedules = () => {
 
@@ -128,7 +130,9 @@ const Schedules = () => {
             </div>
             <div className={"row pt-1"}>
                 <div className="col-xs-12 col-sm-12 col-md-2 offset-md-10 pb-2">
-                    <Button className="btn btn-info" onClick={handleSetListModal}>Ver Legenda</Button>
+                    <Button className="btn btn-info" onClick={handleSetListModal}>
+                        <i className="fas fa-table"></i> Ver Legenda
+                    </Button>
                 </div>
                 <div className={"table-responsive table-striped table-hover"}>
                     <table className={"table"}>
@@ -151,123 +155,32 @@ const Schedules = () => {
                 </div>
             </div>
             
-            <Modal show={schedulerModal} onHide={handleModalClose} backdrop={true}>
-                <form onSubmit={handleScheduleSubmit}>
-                    <Modal.Header>
-                        Registrar horário { hour }:00
-                    </Modal.Header>
-                    <Modal.Body>
-                        <p>
-                            Deseja agendar este horário? ({ hour }:00)<br />
-                        </p>                        
-                        <div className="form-group row">
-                            <label htmlFor="title" className={"col-sm-2 col-form-label"}>Título</label>
-                            <div className="col-sm-10">
-                                <input type="text" onChange={handleScheduleChange} className="form-control" name="title" id="title" placeholder="Resumo do uso da sala" />
-                            </div>                            
-                        </div>
-                        <div className="form-group row">
-                            <label htmlFor="description" className={"col-sm-2 col-form-label"}>Descrição</label>
-                            <div className="col-sm-10">
-                                <input type="text" onChange={handleScheduleChange} className="form-control" name="description" id="description" placeholder="Descrição do uso da sala" />
-                            </div>                            
-                        </div>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <button className="btn btn-success">
-                            Sim
-                        </button>
-                        <Link className="btn btn-danger" onClick={handleCloseButton} to="#">
-                            Cancelar
-                        </Link>
-                    </Modal.Footer>
-                </form>
-            </Modal>
+            <ScheduleModal
+                schedulerModal={schedulerModal}
+                handleModalClose={handleModalClose}
+                hour={hour}
+                handleScheduleChange={handleScheduleChange}
+                handleCloseButton={handleCloseButton}
+                handleScheduleSubmit={handleScheduleSubmit}
+            />
 
-            <Modal show={cancelModal} onHide={handleModalClose} backdrop={true}>
-                <Modal.Header>
-                    Dados da Agenda
-                </Modal.Header>
-                <Modal.Body>
-                    Este horário pertence a você <br />
-                    [Dados pertinente a este agendamento aqui]
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button className="btn btn-danger">
-                        Sim
-                    </Button>
-                    <Button className="btn btn-primary" onClick={handleCloseButton}>
-                        Fechar
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <CancelModal
+                cancelModal={cancelModal}
+                handleModalClose={handleModalClose}
+                handleCloseButton={handleCloseButton}
+            />
 
-            <Modal show={infoModal} onHide={handleModalClose} backdrop={true}>
-                <Modal.Header>
-                    Dados da Agenda
-                </Modal.Header>
-                <Modal.Body>
-                    [Dados pertinentes a este agendamento aqui]
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button className="btn btn-primary" onClick={handleCloseButton}>
-                        Fechar
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <InfoModal
+                infoModal={infoModal}
+                handleModalClose={handleModalClose}
+                handleCloseButton={handleCloseButton}
+            />
 
-            <Modal show={listModal} onHide={handleModalClose} backdrop={true}>
-                <Modal.Header>
-                    Legenda
-                </Modal.Header>
-                <Modal.Body>
-                    <div className="row pb-1">
-                        <div className="col-xs-6 col-md-3">
-                            <Button className="btn btn-outline-success btn-block">
-                                Concluído
-                            </Button>
-                        </div>
-                        <div className="col-xs-6 col-md-7">
-                            <small>Reuniões passadas</small>
-                        </div>
-                    </div>
-                    <div className="row pb-1">
-                        <div className="col-xs-9 col-md-3">
-                            <Button className="btn btn-warning btn-block">
-                                Agendado
-                            </Button>
-                        </div>
-                        <div className="col-xs-6 col-md-7">
-                            <small>Agendado no nome do usuário atual</small>
-                        </div>
-                    </div>
-                    <div className="row pb-1">
-                        <div className="col-xs-9 col-md-3">
-                            <Button className="btn btn-outline-danger btn-block">
-                                Ocupada
-                            </Button>
-                        </div>
-                        <div className="col-xs-6 col-md-7">
-                            <small>Agendado em nome de outro usuário</small>
-                        </div>
-                    </div>
-                    <div className="row pb-1">
-                        <div className="col-xs-9 col-md-3">
-                            <Button className="btn btn-outline-primary btn-block">
-                                Disponível
-                            </Button>
-                        </div>
-                        <div className="col-xs-6 col-md-7">
-                            <small>Disponível</small>
-                        </div>
-                    </div>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button className="btn btn-primary" onClick={handleCloseButton}>
-                        Fechar
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <ModalLegend
+                listModal={listModal}
+                handleModalClose={handleModalClose}
+                handleCloseButton={handleCloseButton}
+            />
         </div>
     )
 }
