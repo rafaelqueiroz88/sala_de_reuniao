@@ -1,5 +1,5 @@
-class Book < ApplicationRecord
-
+class Schedule < ApplicationRecord
+  
   belongs_to :user
 
   before_create :slugify
@@ -10,6 +10,6 @@ class Book < ApplicationRecord
   end
 
   def get_name
-    books.name
+    schedules.name
   end
 end

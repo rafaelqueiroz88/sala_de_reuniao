@@ -1,11 +1,12 @@
-class CreateBooks < ActiveRecord::Migration[6.1]
+class CreateSchedules < ActiveRecord::Migration[6.1]
   def change
-    create_table :books do |t|
+    create_table :schedules do |t|
       t.string :title
       t.string :description
-      t.integer :status
-      t.datetime :hour
+      t.string :status
+      t.string :hour
       t.references :user, null: false, foreign_key: true
+      t.string :slug
 
       t.timestamps
     end

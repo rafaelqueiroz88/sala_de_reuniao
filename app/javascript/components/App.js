@@ -7,15 +7,15 @@ import { Route, Switch } from 'react-router-dom'
 /**
  * Custom or app components here
  */
-import Books from './Books/Books'
+import Schedules from './Schedules/Schedules'
 
 const App = () => {
 
     return(
         <Fragment>
             <Switch>
-                <Route exact path="/" component={Books} />
-                <Route exact path="/agenda" component={Books} />
+                <Route exact path="/" component={Schedules} />
+                <Route exact path="/agenda" component={Schedules} />
             </Switch>
         </Fragment>
     )
