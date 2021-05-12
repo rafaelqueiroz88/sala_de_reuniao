@@ -10,10 +10,11 @@ import CancelModal from './Schedules/CancelModal'
 import ScheduleModal from './Schedules/ScheduleModal'
 import CheckModal from './Schedules/CheckModal'
 
-const Schedules = () => {
+const Schedules = (props) => {
 
     let history = useHistory()
 
+    const user_uri = localStorage.getItem('slug')
     const token = localStorage.getItem('token')
 
     if(token == null)
@@ -30,6 +31,7 @@ const Schedules = () => {
     const [infoModal, setInfoModal] = useState(false)
     const [checkModal, setCheckModal] = useState(false)
     const [listModal, setListModal] = useState(false)
+    const [user, setUser] = useState([])
 
     /**
      * getting week start
@@ -39,6 +41,16 @@ const Schedules = () => {
     let day = today.getDay() || 7
     if(day !== 1)
         today.setHours(-24 * (day - 1))
+
+    useEffect(() => {
+        axios.get(`/api/v1/users/${user_uri}`, config)
+            .then(response => {
+                setUser(response.data.data)
+            })
+            .catch(response => {
+                console.log(response)
+            })
+    }, [])
 
     useEffect(() => {
         axios.get('/api/v1/schedules.json', config)
@@ -54,7 +66,7 @@ const Schedules = () => {
         e.preventDefault()
         setHour(param)
         const hour = {
-            hour: param
+            hour: `2021-05-${param}:00`
         }
         setSchedules(Object.assign(schedules, hour))
         setSchedulerModal(true)
@@ -65,7 +77,7 @@ const Schedules = () => {
         setListModal(true)
     }
 
-    const handleSetCheckModal = (e) => {
+    const handleSetCheckModal = param => e => {
         e.preventDefault()
         setCheckModal(true)
     }
@@ -85,6 +97,7 @@ const Schedules = () => {
         setCancelModal(false)
         setInfoModal(false)
         setListModal(false)
+        setCheckModal(false)
     }
 
     const handleCloseButton = (e) => {
@@ -93,6 +106,7 @@ const Schedules = () => {
         setCancelModal(false)
         setInfoModal(false)
         setListModal(false)
+        setCheckModal(false)
     }
 
     const handleScheduleChange = (e) => {
@@ -103,6 +117,7 @@ const Schedules = () => {
     const handleSignOut = (e) => {
         e.preventDefault()
         localStorage.clear('token')
+        localStorage.clear('slug')
         history.push('/')
     }
 
@@ -115,7 +130,7 @@ const Schedules = () => {
         setSchedules(Object.assign(schedules, status))
 
         const user_id = {
-            user_id: 1
+            user_id: user.id
         }
         setSchedules(Object.assign(schedules, user_id))
 
@@ -124,10 +139,12 @@ const Schedules = () => {
          */
         const csrfToken = document.querySelector('[name=csrf-token]').content
         axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
-
+        
         axios.post('/api/v1/schedules', schedules)
             .then(response => {
                 console.log(response)
+                history.go(0)
+
             })
             .catch(response => {
                 console.log(response)
@@ -149,6 +166,16 @@ const Schedules = () => {
     return(
         <div className={"container"}>
             <div className={"row pt-4"}>
+                <div className={"col-xs-6 col-sm-6 col-md-3 offset-md-6 text-right"}>
+                    <h5>Olá [rafael]!</h5>
+                </div>
+                <div className={"col-xs-6 col-sm-6 col-md-3 text-right"}>
+                    <Button className="btn btn-danger" onClick={handleSignOut}>
+                        <i className="fas fa-sign-out-alt"></i> Sair
+                    </Button>
+                </div>
+            </div>
+            <div className={"row pt-4"}>
                 <div className={"col-xs-12 col-sm-12 col-md-10 offset-md-1"}>
                     <h2 className={"pb-3"}>Agenda da Sala de Reunião - { today.getFullYear() }</h2>
                 </div>
@@ -157,11 +184,6 @@ const Schedules = () => {
                 <div className="col-xs-4 col-sm-4 col-md-2 pb-2">
                     <Button className="btn btn-info" onClick={handleSetListModal}>
                         <i className="fas fa-table"></i> Ver Legenda
-                    </Button>
-                </div>
-                <div className="col-xs-4 col-sm-4 col-md-2 offset-md-6 offset-xs-1 offset-sm-1 pb-2">
-                    <Button className="btn btn-danger" onClick={handleSignOut}>
-                        <i className="fas fa-sign-out-alt"></i> Sair
                     </Button>
                 </div>
             </div>

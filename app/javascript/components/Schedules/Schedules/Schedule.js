@@ -4,8 +4,14 @@ import { Button } from 'react-bootstrap'
 
 const Schedule = (props) => {
 
-    let newDate = new Date()
-    let date = newDate.getDate()
+    /**
+     * getting week start
+     * plus 1 for each day
+     */
+     let monday = new Date()
+     let day = monday.getDay() || 7
+     if(day !== 1)
+        monday.setHours(-24 * (day - 1))
 
     return(
         <tbody>
@@ -14,32 +20,38 @@ const Schedule = (props) => {
                     06:00
                 </td>
                 <td>
-                    <Button className={"btn btn-outline-success btn-block"} onClick={props.handleSetCheckModal} >
+                    <Button className={"btn btn-outline-success btn-block"} onClick={props.handleSetCheckModal(`${ monday.getDate() } 06:00`)} >
                         <i className="fas fa-clipboard-check"></i> Concluído
                     </Button>
                 </td>
                 <td>
-                    <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${date + 1} 06:00`)} >
+                    <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${ monday.getDate() + 1 } 06:00`)} >
                         <i className="fas fa-calendar-day"></i> Disponível
                     </Button>
                 </td>
                 <td>
-                    <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${date + 2} 06:00`)} >Disponível</Button>
+                    <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${ monday.getDate() + 2 } 06:00`)} >
+                        <i className="fas fa-calendar-day"></i> Disponível
+                    </Button>
                 </td>
                 <td>
-                    <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${date + 3} 06:00`)} >Disponível</Button>
+                    <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${ monday.getDate() + 3 } 06:00`)} >
+                        <i className="fas fa-calendar-day"></i> Disponível
+                    </Button>
                 </td>
                 <td>
-                    <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${date + 4} 06:00`)} >Disponível</Button>
+                    <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${ monday.getDate() + 4 } 06:00`)} >
+                        <i className="fas fa-calendar-day"></i> Disponível
+                    </Button>
                 </td>
             </tr>
             <tr>
                 <td>07:00</td>
                 <td>
-                    <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${date} 07:00`)} >Disponível</Button>
+                    <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${ monday.getDate() } 07:00`)} >Disponível</Button>
                 </td>
                 <td>
-                    <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${date + 1} 07:00`)} >Disponível</Button>
+                    <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${ monday.getDate() + 1 } 07:00`)} >Disponível</Button>
                 </td>
                 <td>
                     <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton} >Disponível</Button>
@@ -74,7 +86,9 @@ const Schedule = (props) => {
             <tr>
                 <td>09:00</td>
                 <td>
-                    <Button className={"btn btn-outline-danger btn-block"} onClick={props.handleInfoModal} >Ocupada</Button>
+                    <Button className={"btn btn-warning btn-block"} onClick={props.handleCancelModal} > 
+                        <i className="fas fa-users"></i> Agendado
+                    </Button>
                 </td>
                 <td>
                     <Button className={"btn btn-outline-danger btn-block"} onClick={props.handleInfoModal} >Ocupada</Button>
