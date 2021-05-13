@@ -16,9 +16,20 @@ const ModalLegend = (props) => {
                         </Button>
                     </div>
                     <div className="col-xs-6 col-md-7">
+                        <small>Período encerrado</small>
+                    </div>
+                </div>
+                <div className="row pb-1">
+                    <div className="col-xs-6 col-md-5">
+                        <Button className={"btn btn-success btn-block"} >
+                            <i className="fas fa-calendar-day"></i> Concluído
+                        </Button>
+                    </div>
+                    <div className="col-xs-6 col-md-7">
                         <small>Reuniões encerradas</small>
                     </div>
                 </div>
+                
                 <div className="row pb-1">
                     <div className="col-xs-9 col-md-5">
                         <Button className="btn btn-warning btn-block">

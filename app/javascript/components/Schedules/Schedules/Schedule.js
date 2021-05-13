@@ -1,6 +1,5 @@
 import React from 'react'
-import { Button } from 'react-bootstrap'
-import Week from './Buttons/Week'
+import Week from './Week'
 
 const Schedule = (props) => {
 
@@ -12,8 +11,6 @@ const Schedule = (props) => {
     let day = monday.getDay() || 7
     if(day !== 1)
         monday.setHours(-24 * (day - 1))
-
-    let today = new Date()
 
     let week = []
     if(props.loaded) {
@@ -31,6 +28,9 @@ const Schedule = (props) => {
                     hour={i}
                     handleSetCheckModal={props.handleSetCheckModal}
                     handleSchedulerButton={props.handleSchedulerButton}
+                    schedules={props.schedules}
+                    current_user={props.current_user}
+                    current_user_id={props.current_user_id}
                 />
             )
         }
@@ -70,6 +70,10 @@ const Schedule = (props) => {
             { week[14] }
 
             { week[15] }
+
+            { week[16] }
+
+            { week[17] }
             
             {/* 
                 <tr>

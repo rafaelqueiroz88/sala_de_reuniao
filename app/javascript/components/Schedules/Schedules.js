@@ -25,13 +25,13 @@ const Schedules = (props) => {
     }
 
     const [schedules, setSchedules] = useState([])
+    const [user, setUser] = useState([])
     const [hour, setHour] = useState(0)
     const [schedulerModal, setSchedulerModal] = useState(false)
     const [cancelModal, setCancelModal] = useState(false)
     const [infoModal, setInfoModal] = useState(false)
     const [checkModal, setCheckModal] = useState(false)
-    const [listModal, setListModal] = useState(false)
-    const [user, setUser] = useState([])
+    const [listModal, setListModal] = useState(false)    
     const [loaded, setLoaded] = useState(false)
 
     /**
@@ -187,7 +187,6 @@ const Schedules = (props) => {
 
         axios.post('/api/v1/schedules', schedules)
             .then(response => {
-                console.log(response)
                 history.go(0)
             })
             .catch(response => {
@@ -208,7 +207,9 @@ const Schedules = (props) => {
     // })
 
     let user_data = []
+    let user_id = user.id
     if(loaded) {
+        user_id = user.id
         user_data = user.attributes
     }
 
@@ -255,6 +256,9 @@ const Schedules = (props) => {
                             handleCancelModal={handleCancelModal}
                             handleInfoModal={handleInfoModal}
                             handleSetCheckModal={handleSetCheckModal}
+                            schedules={schedules}
+                            current_user={user}
+                            current_user_id={user_id}
                         />
                     </table>
                 </div>

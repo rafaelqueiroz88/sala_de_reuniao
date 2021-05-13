@@ -1,16 +1,29 @@
 import React from 'react'
 
-import ScheduleButton from './ScheduleButton'
+import ScheduleButton from './Buttons/ScheduleButton'
 
 const Week = (props) => {
+
+    let has_data
+    let scheduled_date = []
+    let scheduled_time = []
+    let i = 0
+    if(props.schedules.length > 0) {
+        has_data = true
+        while(i < props.schedules.length) {
+            let format = props.schedules[i].attributes.hour
+            format = format.split(' ')
+            scheduled_date.push(format[0])
+            scheduled_time.push(format[1])
+            i = i + 1
+        }
+    }
 
     let hour = new Date()
 
     hour.setHours(props.hour)
     hour.setMinutes(0)
     hour.setSeconds(0)
-
-    let now = new Date()
 
     /**
      * Adjusting time for display
@@ -36,85 +49,89 @@ const Week = (props) => {
             </td>
             <td>
                 {
-                    <ScheduleButton 
-                        key={0} 
-                        status={status}
+                    <ScheduleButton
                         hour={display_hour}
                         handleSetCheckModal={props.handleSetCheckModal}
                         handleSchedulerButton={props.handleSchedulerButton}
+                        has_data={has_data}
+                        current_user={props.current_user}
+                        scheduled_date={scheduled_date}
+                        scheduled_time={scheduled_time}
+                        schedules={props.schedules}
                         day={monday.getDate()}
                         month={monday.getMonth()}
                         hour={props.hour}
+                        current_user_id={props.current_user_id}
                     />
                 }
             </td>
             <td>
                 {
-                    <ScheduleButton 
-                        key={0} 
-                        status={status}
+                    <ScheduleButton
                         hour={display_hour}
                         handleSetCheckModal={props.handleSetCheckModal}
                         handleSchedulerButton={props.handleSchedulerButton}
+                        has_data={has_data}
+                        scheduled_date={scheduled_date}
+                        scheduled_time={scheduled_time}
+                        schedules={props.schedules}
                         day={monday.getDate() + 1}
                         month={monday.getMonth()}
                         hour={props.hour}
+                        current_user_id={props.current_user_id}
                     />
                 }
-                {/* <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${ monday.getDate() + 1 } 06:00`)} >
-                    <i className="fas fa-calendar-day"></i> Disponível
-                </Button> */}
             </td>
             <td>
                 {
-                    <ScheduleButton 
-                        key={0} 
-                        status={status}
+                    <ScheduleButton
                         hour={display_hour}
                         handleSetCheckModal={props.handleSetCheckModal}
                         handleSchedulerButton={props.handleSchedulerButton}
+                        has_data={has_data}
+                        scheduled_date={scheduled_date}
+                        scheduled_time={scheduled_time}
+                        schedules={props.schedules}
                         day={monday.getDate() + 2}
                         month={monday.getMonth()}
                         hour={props.hour}
+                        current_user_id={props.current_user_id}
                     />
                 }
-                {/* <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${ monday.getDate() + 2 } 06:00`)} >
-                    <i className="fas fa-calendar-day"></i> Disponível
-                </Button> */}
             </td>
             <td>
                 {
-                    <ScheduleButton 
-                        key={0} 
-                        status={status}
+                    <ScheduleButton
                         hour={display_hour}
                         handleSetCheckModal={props.handleSetCheckModal}
                         handleSchedulerButton={props.handleSchedulerButton}
+                        has_data={has_data}
+                        scheduled_date={scheduled_date}
+                        scheduled_time={scheduled_time}
+                        schedules={props.schedules}
                         day={monday.getDate() + 3}
                         month={monday.getMonth()}
                         hour={props.hour}
+                        current_user_id={props.current_user_id}
                     />
                 }
-                {/* <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${ monday.getDate() + 3 } 06:00`)} >
-                    <i className="fas fa-calendar-day"></i> Disponível
-                </Button> */}
             </td>
             <td>
                 {
-                    <ScheduleButton 
-                        key={0} 
-                        status={status}
+                    <ScheduleButton
                         hour={display_hour}
                         handleSetCheckModal={props.handleSetCheckModal}
                         handleSchedulerButton={props.handleSchedulerButton}
+                        has_data={has_data}
+                        scheduled_date={scheduled_date}
+                        scheduled_time={scheduled_time}
+                        schedules={props.schedules}
                         day={monday.getDate() + 4}
                         month={monday.getMonth()}
                         hour={props.hour}
+                        current_user_id={props.current_user_id}
                     />
                 }
-                {/* <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${ monday.getDate() + 4 } 06:00`)} >
-                    <i className="fas fa-calendar-day"></i> Disponível
-                </Button> */}
             </td>
         </tr>
     )
