@@ -1,6 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
+import Week from './Buttons/Week'
 
 const Schedule = (props) => {
 
@@ -8,44 +8,71 @@ const Schedule = (props) => {
      * getting week start
      * plus 1 for each day
      */
-     let monday = new Date()
-     let day = monday.getDay() || 7
-     if(day !== 1)
+    let monday = new Date()
+    let day = monday.getDay() || 7
+    if(day !== 1)
         monday.setHours(-24 * (day - 1))
+
+    let today = new Date()
+
+    let week = []
+    if(props.loaded) {
+
+        /**
+         * i = hours
+         * k = week
+         */
+        let i = 6
+        
+        for(i; i < 24; i ++) {
+
+            week.push(
+                <Week
+                    hour={i}
+                    handleSetCheckModal={props.handleSetCheckModal}
+                    handleSchedulerButton={props.handleSchedulerButton}
+                />
+            )
+        }
+    }
 
     return(
         <tbody>
-            <tr>
-                <td>
-                    06:00
-                </td>
-                <td>
-                    <Button className={"btn btn-outline-success btn-block"} onClick={props.handleSetCheckModal(`${ monday.getDate() } 06:00`)} >
-                        <i className="fas fa-clipboard-check"></i> Concluído
-                    </Button>
-                </td>
-                <td>
-                    <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${ monday.getDate() + 1 } 06:00`)} >
-                        <i className="fas fa-calendar-day"></i> Disponível
-                    </Button>
-                </td>
-                <td>
-                    <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${ monday.getDate() + 2 } 06:00`)} >
-                        <i className="fas fa-calendar-day"></i> Disponível
-                    </Button>
-                </td>
-                <td>
-                    <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${ monday.getDate() + 3 } 06:00`)} >
-                        <i className="fas fa-calendar-day"></i> Disponível
-                    </Button>
-                </td>
-                <td>
-                    <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${ monday.getDate() + 4 } 06:00`)} >
-                        <i className="fas fa-calendar-day"></i> Disponível
-                    </Button>
-                </td>
-            </tr>
-            <tr>
+            
+            { week[0] }
+
+            { week[1] }
+
+            { week[2] }
+
+            { week[3] }
+
+            { week[4] }
+
+            { week[5] }
+
+            { week[6] }
+
+            { week[7] }
+
+            { week[8] }
+
+            { week[9] }
+
+            { week[10] }
+
+            { week[11] }
+
+            { week[12] }
+
+            { week[13] }
+
+            { week[14] }
+
+            { week[15] }
+            
+            {/* 
+                <tr>
                 <td>07:00</td>
                 <td>
                     <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton(`${ monday.getDate() } 07:00`)} >Disponível</Button>
@@ -356,7 +383,8 @@ const Schedule = (props) => {
                 <td>
                     <Button className={"btn btn-outline-primary btn-block"} onClick={props.handleSchedulerButton} >Disponível</Button>
                 </td>
-            </tr>             
+            </tr>
+             */}        
         </tbody>        
     )
 }

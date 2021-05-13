@@ -6,8 +6,9 @@ class Schedule < ApplicationRecord
 
   now = Date.today
   monday = (now - now.wday) + 1
-  
-  scope :search_week, -> { where("DATE(hour) >= ?", monday) }
+  friday = (now - now.wday) + 5
+
+  scope :search_week, -> { where("DATE(hour) BETWEEN ? AND ?", monday, friday) }
 
   def slugify
     puzzle = rand(10000...99999)

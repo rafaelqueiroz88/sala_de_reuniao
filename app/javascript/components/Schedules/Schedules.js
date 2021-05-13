@@ -32,6 +32,7 @@ const Schedules = (props) => {
     const [checkModal, setCheckModal] = useState(false)
     const [listModal, setListModal] = useState(false)
     const [user, setUser] = useState([])
+    const [loaded, setLoaded] = useState(false)
 
     /**
      * getting week start
@@ -46,6 +47,7 @@ const Schedules = (props) => {
         axios.get(`/api/v1/users/${user_uri}`, config)
             .then(response => {
                 setUser(response.data.data)
+                setLoaded(true)
             })
             .catch(response => {
                 console.log(response)
@@ -65,9 +67,52 @@ const Schedules = (props) => {
     const handleSchedulerButton = param => e => {
         e.preventDefault()
         setHour(param)
-        const hour = {
-            hour: `2021-05-${param}:00`
+        let query = param.split(' ')
+        let month = query[0].split('/')
+        let selectedMonth
+        switch(month[1]) {
+            case 'Janeiro':
+                selectedMonth = '01'
+                break
+            case 'Fevereiro':
+                selectedMonth = '02'
+                break
+            case 'Março':
+                selectedMonth = '03'
+                break
+            case 'Abril':
+                selectedMonth = '04'
+                break
+            case 'Maio':
+                selectedMonth = '05'
+                break
+            case 'Junho':
+                selectedMonth = '06'
+                break
+            case 'Julho':
+                selectedMonth = '07'
+                break
+            case 'Agosto':
+                selectedMonth = '08'
+                break
+            case 'Setembro':
+                selectedMonth = '09'
+                break
+            case 'Outubro':
+                selectedMonth = '10'
+                break
+            case 'Novembro':
+                selectedMonth = '11'
+                break
+            case 'Dezembro':
+                selectedMonth = '12'
+                break
         }
+
+        const hour = {
+            hour: `2021-${selectedMonth}-${month[0]} ${query[1]}:00:00`
+        }
+
         setSchedules(Object.assign(schedules, hour))
         setSchedulerModal(true)
     }
@@ -139,12 +184,11 @@ const Schedules = (props) => {
          */
         const csrfToken = document.querySelector('[name=csrf-token]').content
         axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
-        
+
         axios.post('/api/v1/schedules', schedules)
             .then(response => {
                 console.log(response)
                 history.go(0)
-
             })
             .catch(response => {
                 console.log(response)
@@ -163,11 +207,16 @@ const Schedules = (props) => {
     //     )
     // })
 
+    let user_data = []
+    if(loaded) {
+        user_data = user.attributes
+    }
+
     return(
         <div className={"container"}>
             <div className={"row pt-4"}>
                 <div className={"col-xs-6 col-sm-6 col-md-3 offset-md-6 text-right"}>
-                    <h5>Olá [rafael]!</h5>
+                    <h5>Olá { user_data.name }!</h5>
                 </div>
                 <div className={"col-xs-6 col-sm-6 col-md-3 text-right"}>
                     <Button className="btn btn-danger" onClick={handleSignOut}>
@@ -201,6 +250,7 @@ const Schedules = (props) => {
                             </tr>
                         </thead>
                         <Schedule
+                            loaded={loaded}
                             handleSchedulerButton={handleSchedulerButton}
                             handleCancelModal={handleCancelModal}
                             handleInfoModal={handleInfoModal}
