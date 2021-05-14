@@ -25,13 +25,18 @@ const Schedules = (props) => {
     }
 
     const [schedules, setSchedules] = useState([])
+    const [schedule, setSchedule] = useState([])
     const [user, setUser] = useState([])
     const [hour, setHour] = useState(0)
     const [schedulerModal, setSchedulerModal] = useState(false)
     const [cancelModal, setCancelModal] = useState(false)
     const [infoModal, setInfoModal] = useState(false)
     const [checkModal, setCheckModal] = useState(false)
-    const [listModal, setListModal] = useState(false)    
+    const [listModal, setListModal] = useState(false)
+    const [modal_title, setModalTitle] = useState('')
+    const [modal_text, setModalText] = useState('')
+    const [modal_date, setModalDate] = useState('')
+    const [schedule_slug, setScheduleSlug] = useState('')
     const [loaded, setLoaded] = useState(false)
 
     /**
@@ -64,7 +69,7 @@ const Schedules = (props) => {
             })
     }, [])
 
-    const handleSchedulerButton = param => e => {
+    const handleSchedulerButton = (param) => e => {
         e.preventDefault()
         setHour(param)
         let query = param.split(' ')
@@ -117,23 +122,42 @@ const Schedules = (props) => {
         setSchedulerModal(true)
     }
 
+    const handleCancelerButton = (slug) => (e) => {
+        e.preventDefault()
+        const url = `/api/v1/schedules/${slug}`
+        axios.delete(url, config)
+            .then(response => {
+                history.go(0)
+            })
+            .catch(response => {
+                console.log(response)
+            })
+    }
+
     const handleSetListModal = (e) => {
         e.preventDefault()
         setListModal(true)
     }
 
-    const handleSetCheckModal = param => e => {
+    const handleSetCheckModal = (text) => e => {
+        setModalText(text)
         e.preventDefault()
         setCheckModal(true)
     }
 
-    const handleCancelModal = (e) => {
+    const handleCancelModal = (date, title, text, slug) => (e) => {
+        setModalDate(date)
+        setModalTitle(title)
+        setModalText(text)
+        setScheduleSlug(slug)
         e.preventDefault()
         setCancelModal(true)
     }
 
-    const handleInfoModal = (e) => {
+    const handleInfoModal = (title, text) => (e) => {
         e.preventDefault()
+        setModalTitle(title)
+        setModalText(text)
         setInfoModal(true)
     }
 
@@ -157,6 +181,11 @@ const Schedules = (props) => {
     const handleScheduleChange = (e) => {
         e.preventDefault()
         setSchedules(Object.assign({}, schedules, {[e.target.name]: e.target.value}))
+    }
+
+    const handleScheduledChange = (e) => {
+        e.preventDefault()
+        setSchedule(Object.assign({}, schedule, {[e.target.name]: e.target.value}))
     }
 
     const handleSignOut = (e) => {
@@ -196,15 +225,44 @@ const Schedules = (props) => {
         setSchedulerModal(false)
     }
 
-    // const lines = schedules.map(item => {
+    const handleScheduleUpdateSubmit = (e) => {
 
-    //     return(
-    //         <Book
-    //             key={item.id}
-    //             attributes={item.attributes}
-    //         /> 
-    //     )
-    // })
+        e.preventDefault()
+
+        const status = {
+            status: 1
+        }
+        setSchedule(Object.assign(schedule, status))
+
+        const user_id = {
+            user_id: user.id
+        }
+        setSchedule(Object.assign(schedule, user_id))
+
+        /**
+         * Preparing token and setup for post request
+         */
+        const csrfToken = document.querySelector('[name=csrf-token]').content
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
+
+        const target_slug = document.getElementById('target_slug').value
+
+        const url = `/api/v1/schedules/${target_slug}`
+        
+        /**
+         * preciso de uma lógica para obter o SLUG antes de fazer esse envio
+         */
+        axios.patch(url, schedule, config)
+            .then(response => {
+                console.log(response)
+                history.go(0)
+            })
+            .catch(response => {
+                console.log(response)
+            })
+
+        setCancelModal(false)
+    }
 
     let user_data = []
     let user_id = user.id
@@ -275,11 +333,19 @@ const Schedules = (props) => {
 
             <CancelModal
                 cancelModal={cancelModal}
+                modal_text={modal_text}
+                modal_title={modal_title}
+                modal_date={modal_date}
+                schedule_slug={schedule_slug}
                 handleModalClose={handleModalClose}
                 handleCloseButton={handleCloseButton}
+                handleCancelerButton={handleCancelerButton}
+                handleScheduledChange={handleScheduledChange}
+                handleScheduleUpdateSubmit={handleScheduleUpdateSubmit}
             />
 
             <CheckModal
+                modal_text={modal_text}
                 checkModal={checkModal}
                 handleModalClose={handleModalClose}
                 handleCloseButton={handleCloseButton}
@@ -287,6 +353,8 @@ const Schedules = (props) => {
 
             <InfoModal
                 infoModal={infoModal}
+                modal_title={modal_title}
+                modal_text={modal_text}
                 handleModalClose={handleModalClose}
                 handleCloseButton={handleCloseButton}
             />

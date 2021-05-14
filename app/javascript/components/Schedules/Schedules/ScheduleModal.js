@@ -11,19 +11,19 @@ const ScheduleModal = (props) => {
                 </Modal.Header>
                 <Modal.Body>
                     <p>
-                        Deseja agendar este horário? ({ props.hour }:00)<br />
+                        Preencha o formulário para agendar este horário ({ props.hour }:00)<br />
                     </p>                        
                     <div className="form-group row">
                         <label htmlFor="title" className={"col-sm-2 col-form-label"}>Título</label>
                         <div className="col-sm-10">
                             <input type="text" onChange={props.handleScheduleChange} className="form-control" name="title" id="title" placeholder="Resumo do uso da sala" />
-                        </div>                            
+                        </div>
                     </div>
                     <div className="form-group row">
                         <label htmlFor="description" className={"col-sm-2 col-form-label"}>Descrição</label>
                         <div className="col-sm-10">
                             <input type="text" onChange={props.handleScheduleChange} className="form-control" name="description" id="description" placeholder="Descrição do uso da sala" />
-                        </div>                            
+                        </div>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>

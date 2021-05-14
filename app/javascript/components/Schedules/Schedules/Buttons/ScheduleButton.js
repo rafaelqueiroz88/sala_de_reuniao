@@ -29,7 +29,12 @@ const ScheduleButton = (props) => {
      * All schedule mount logic is here
      */
     let i = 0
+    let modal_text = ''
+    let modal_title = ''
+    let slug = ''
     if(props.has_data) {
+
+        // console.log(props)
         
         if(props.day < now.getDate()) {
 
@@ -37,11 +42,14 @@ const ScheduleButton = (props) => {
 
             while(i < props.scheduled_date.length) {
 
+                // console.log(props.schedules[i])
+
                 let formated = props.scheduled_date[i].split('-')
                 let formated_time = props.scheduled_time[i].split(':')
 
                 if(formated[2] == props.day) {
                     if(formated_time[0] == props.hour) {
+                        modal_text = props.schedules[i].attributes.title
                         status = 2
                     }
                     else {
@@ -68,7 +76,7 @@ const ScheduleButton = (props) => {
                         }
                         else {
                             status = 4
-                        } 
+                        }
                     }
                 }
 
@@ -99,7 +107,31 @@ const ScheduleButton = (props) => {
                 }
             }
             else if(props.hour > now.getHours()) {
-                status = 1                
+
+                while(i < props.scheduled_date.length) {
+
+                    let formated = props.scheduled_date[i].split('-')
+                    let formated_time = props.scheduled_time[i].split(':')
+    
+                    if(formated[2] == props.day) {
+                        if(formated_time[0] == props.hour) {
+                            
+                            if(props.current_user_id == props.schedules[i].attributes.user_id) {
+                                modal_title = props.schedules[i].attributes.title
+                                modal_text = props.schedules[i].attributes.description
+                                slug = props.schedules[i].attributes.slug
+                                status = 3
+                            }
+                            else {
+                                modal_title = props.schedules[i].attributes.title
+                                modal_text = props.schedules[i].attributes.description
+                                status = 4
+                            }
+                        }
+                    }
+    
+                    i++
+                }
             }
             else if(props.hour == now.getHours()) {
                 
@@ -127,8 +159,9 @@ const ScheduleButton = (props) => {
      * Empty, nothing for this date and not able to register
      */
     if(status == 0) {
+        modal_text = 'Nada ocorreu na agenda deste horário'
         button = 
-            <Button onClick={props.handleSetCheckModal(`${ props.day }/${ monthNames[props.month] } ${ props.hour }`)} className={"btn btn-outline-success btn-block"} >
+            <Button onClick={props.handleSetCheckModal(modal_text)} className={"btn btn-outline-success btn-block"} >
                 <i className="fas fa-clipboard-check"></i> Concluído
             </Button>
     }
@@ -148,7 +181,7 @@ const ScheduleButton = (props) => {
      */
     if(status == 2) {
         button = 
-            <Button onClick={props.handleSchedulerButton(`${ props.day }/${ monthNames[props.month] } ${ props.hour }`)} className={"btn btn-success btn-block"} >
+            <Button onClick={props.handleSetCheckModal(modal_text)} className={"btn btn-success btn-block"} >
                 <i className="fas fa-calendar-day"></i> Concluído
             </Button>
     }
@@ -158,7 +191,7 @@ const ScheduleButton = (props) => {
      */
     if(status == 3) {
         button = 
-            <Button onClick={props.handleSchedulerButton(`${ props.day }/${ monthNames[props.month] } ${ props.hour }`)} className={"btn btn-warning btn-block"} >
+            <Button onClick={props.handleCancelModal(`${ props.day }/${ monthNames[props.month] } ${ props.hour }`, modal_title, modal_text, slug)} className={"btn btn-warning btn-block"} >
                 <i className="fas fa-users"></i> Agendado
             </Button>
     }
@@ -168,7 +201,7 @@ const ScheduleButton = (props) => {
      */
      if(status == 4) {
         button = 
-            <Button onClick={props.handleSchedulerButton(`${ props.day }/${ monthNames[props.month] } ${ props.hour }`)} className={"btn btn-outline-danger btn-block"} >
+            <Button onClick={props.handleInfoModal(modal_title, modal_text)} className={"btn btn-outline-danger btn-block"} >
                 <i className="fas fa-user-lock"></i> Ocupada
             </Button>
     }
