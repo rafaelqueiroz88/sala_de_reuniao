@@ -36,12 +36,6 @@ module Api
 
             # @post: /api/v1/users/:slug
             def create
-                # user = User.new(user_params)
-                # if user.save
-                #     render json: UserSerializer.new(user).serialized_json
-                # else
-                #     render json: { error: user.errors.message }, status: 422
-                # end
                 @user = User.create(user_params)
                 if @user.valid?
                     token = encode_token({user_id: @user.id})
@@ -51,18 +45,8 @@ module Api
                 end
             end
 
-            # @patch: /api/v1/users/:slug
-            def update
-                user = User.find_by(slug: params[:slug])
-                if user.update(user_params)
-                    render json: UserSerializer.new(user, options).serialized_json
-                else
-                    render json: { error: user.errors.message }, status: 422
-                end
-            end
-
             # @delete: /api/v1/users/:slug
-            def delete
+            def destroy
                 user = User.find_by(slug: params[:slug])
                 if user.delete
                     head :no_content

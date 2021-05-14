@@ -12,7 +12,7 @@ const CheckModal = (props) => {
                 <strong>
                     Este horário já acabou e não pode mais ser alterado
                 </strong> <br />
-                [Dados pertinentes a este agendamento aqui]
+                { props.modal_text }
             </Modal.Body>
             <Modal.Footer>
                 <Button className="btn btn-primary" onClick={props.handleCloseButton}>

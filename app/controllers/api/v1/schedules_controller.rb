@@ -4,8 +4,7 @@ module Api
 
             protect_from_forgery with: :null_session
 
-            # before_action :authorized, except: [:index]
-            # before_action :authorized
+            before_action :authorized
 
             # @get: /api/v1/schedules.json
             def index
@@ -41,7 +40,7 @@ module Api
             end
 
             # @delete: /api/v1/schedules/:slug
-            def delete
+            def destroy
                 schedule = Schedule.find_by(slug: params[:slug])
                 if schedule.delete
                     head :no_content

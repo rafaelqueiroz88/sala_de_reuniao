@@ -53,6 +53,8 @@ const Week = (props) => {
                         hour={display_hour}
                         handleSetCheckModal={props.handleSetCheckModal}
                         handleSchedulerButton={props.handleSchedulerButton}
+                        handleInfoModal={props.handleInfoModal}
+                        handleCancelModal={props.handleCancelModal}
                         has_data={has_data}
                         current_user={props.current_user}
                         scheduled_date={scheduled_date}
@@ -71,6 +73,8 @@ const Week = (props) => {
                         hour={display_hour}
                         handleSetCheckModal={props.handleSetCheckModal}
                         handleSchedulerButton={props.handleSchedulerButton}
+                        handleInfoModal={props.handleInfoModal}
+                        handleCancelModal={props.handleCancelModal}
                         has_data={has_data}
                         scheduled_date={scheduled_date}
                         scheduled_time={scheduled_time}
@@ -88,6 +92,8 @@ const Week = (props) => {
                         hour={display_hour}
                         handleSetCheckModal={props.handleSetCheckModal}
                         handleSchedulerButton={props.handleSchedulerButton}
+                        handleInfoModal={props.handleInfoModal}
+                        handleCancelModal={props.handleCancelModal}
                         has_data={has_data}
                         scheduled_date={scheduled_date}
                         scheduled_time={scheduled_time}
@@ -105,6 +111,8 @@ const Week = (props) => {
                         hour={display_hour}
                         handleSetCheckModal={props.handleSetCheckModal}
                         handleSchedulerButton={props.handleSchedulerButton}
+                        handleInfoModal={props.handleInfoModal}
+                        handleCancelModal={props.handleCancelModal}
                         has_data={has_data}
                         scheduled_date={scheduled_date}
                         scheduled_time={scheduled_time}
@@ -122,6 +130,8 @@ const Week = (props) => {
                         hour={display_hour}
                         handleSetCheckModal={props.handleSetCheckModal}
                         handleSchedulerButton={props.handleSchedulerButton}
+                        handleInfoModal={props.handleInfoModal}
+                        handleCancelModal={props.handleCancelModal}
                         has_data={has_data}
                         scheduled_date={scheduled_date}
                         scheduled_time={scheduled_time}
