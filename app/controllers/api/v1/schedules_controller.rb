@@ -5,18 +5,19 @@ module Api
             protect_from_forgery with: :null_session
 
             # before_action :authorized, except: [:index]
-            before_action :authorized
+            # before_action :authorized
 
             # @get: /api/v1/schedules.json
             def index
-                schedules = Schedule.all
-                render json: ScheduleSerializer.new(schedules).serialized_json
+                # schedules = Schedule.all
+                schedules = Schedule.search_week
+                render json: ScheduleSerializer.new(schedules, options).serialized_json
             end
 
             # @get: /api/v1/schedules/:slug
             def show
                 schedule = Schedule.find_by(slug: params[:slug])
-                render json: ScheduleSerializer.new(schedule).serialized_json
+                render json: ScheduleSerializer.new(schedule, options).serialized_json
             end
 
             # @post: /api/v1/schedules
@@ -54,6 +55,10 @@ module Api
 
             def schedule_params
                 params.require(:schedule).permit(:title, :description, :status, :hour, :user_id)
+            end
+
+            def options
+                @options ||= { include: %i[user] }
             end
         end
     end

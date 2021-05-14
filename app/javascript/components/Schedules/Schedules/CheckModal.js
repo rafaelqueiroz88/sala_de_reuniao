@@ -6,7 +6,7 @@ const CheckModal = (props) => {
     return(
         <Modal show={props.checkModal} onHide={props.handleModalClose} backdrop={true}>
             <Modal.Header>
-                Reunião Encerrada
+                Período Indisponível
             </Modal.Header>
             <Modal.Body>
                 <strong>

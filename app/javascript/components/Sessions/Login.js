@@ -38,6 +38,7 @@ const Login = () => {
         axios.post('/api/v1/login', authUser)
             .then(response => {
                 localStorage.setItem('token', response.data.token)
+                localStorage.setItem('slug', response.data.user.slug)
                 history.push('/agenda')
             })
             .catch(response => {
@@ -54,6 +55,7 @@ const Login = () => {
         axios.post('/api/v1/users', newUser)
             .then(response => {
                 localStorage.setItem('token', response.data.token)
+                localStorage.setItem('slug', response.data.user.slug)
                 history.push('/agenda')
             })
             .catch(response => {

@@ -10,10 +10,11 @@ import CancelModal from './Schedules/CancelModal'
 import ScheduleModal from './Schedules/ScheduleModal'
 import CheckModal from './Schedules/CheckModal'
 
-const Schedules = () => {
+const Schedules = (props) => {
 
     let history = useHistory()
 
+    const user_uri = localStorage.getItem('slug')
     const token = localStorage.getItem('token')
 
     if(token == null)
@@ -24,12 +25,14 @@ const Schedules = () => {
     }
 
     const [schedules, setSchedules] = useState([])
+    const [user, setUser] = useState([])
     const [hour, setHour] = useState(0)
     const [schedulerModal, setSchedulerModal] = useState(false)
     const [cancelModal, setCancelModal] = useState(false)
     const [infoModal, setInfoModal] = useState(false)
     const [checkModal, setCheckModal] = useState(false)
-    const [listModal, setListModal] = useState(false)
+    const [listModal, setListModal] = useState(false)    
+    const [loaded, setLoaded] = useState(false)
 
     /**
      * getting week start
@@ -39,6 +42,17 @@ const Schedules = () => {
     let day = today.getDay() || 7
     if(day !== 1)
         today.setHours(-24 * (day - 1))
+
+    useEffect(() => {
+        axios.get(`/api/v1/users/${user_uri}`, config)
+            .then(response => {
+                setUser(response.data.data)
+                setLoaded(true)
+            })
+            .catch(response => {
+                console.log(response)
+            })
+    }, [])
 
     useEffect(() => {
         axios.get('/api/v1/schedules.json', config)
@@ -53,9 +67,52 @@ const Schedules = () => {
     const handleSchedulerButton = param => e => {
         e.preventDefault()
         setHour(param)
-        const hour = {
-            hour: param
+        let query = param.split(' ')
+        let month = query[0].split('/')
+        let selectedMonth
+        switch(month[1]) {
+            case 'Janeiro':
+                selectedMonth = '01'
+                break
+            case 'Fevereiro':
+                selectedMonth = '02'
+                break
+            case 'Março':
+                selectedMonth = '03'
+                break
+            case 'Abril':
+                selectedMonth = '04'
+                break
+            case 'Maio':
+                selectedMonth = '05'
+                break
+            case 'Junho':
+                selectedMonth = '06'
+                break
+            case 'Julho':
+                selectedMonth = '07'
+                break
+            case 'Agosto':
+                selectedMonth = '08'
+                break
+            case 'Setembro':
+                selectedMonth = '09'
+                break
+            case 'Outubro':
+                selectedMonth = '10'
+                break
+            case 'Novembro':
+                selectedMonth = '11'
+                break
+            case 'Dezembro':
+                selectedMonth = '12'
+                break
         }
+
+        const hour = {
+            hour: `2021-${selectedMonth}-${month[0]} ${query[1]}:00:00`
+        }
+
         setSchedules(Object.assign(schedules, hour))
         setSchedulerModal(true)
     }
@@ -65,7 +122,7 @@ const Schedules = () => {
         setListModal(true)
     }
 
-    const handleSetCheckModal = (e) => {
+    const handleSetCheckModal = param => e => {
         e.preventDefault()
         setCheckModal(true)
     }
@@ -85,6 +142,7 @@ const Schedules = () => {
         setCancelModal(false)
         setInfoModal(false)
         setListModal(false)
+        setCheckModal(false)
     }
 
     const handleCloseButton = (e) => {
@@ -93,6 +151,7 @@ const Schedules = () => {
         setCancelModal(false)
         setInfoModal(false)
         setListModal(false)
+        setCheckModal(false)
     }
 
     const handleScheduleChange = (e) => {
@@ -103,6 +162,7 @@ const Schedules = () => {
     const handleSignOut = (e) => {
         e.preventDefault()
         localStorage.clear('token')
+        localStorage.clear('slug')
         history.push('/')
     }
 
@@ -115,7 +175,7 @@ const Schedules = () => {
         setSchedules(Object.assign(schedules, status))
 
         const user_id = {
-            user_id: 1
+            user_id: user.id
         }
         setSchedules(Object.assign(schedules, user_id))
 
@@ -127,7 +187,7 @@ const Schedules = () => {
 
         axios.post('/api/v1/schedules', schedules)
             .then(response => {
-                console.log(response)
+                history.go(0)
             })
             .catch(response => {
                 console.log(response)
@@ -146,8 +206,25 @@ const Schedules = () => {
     //     )
     // })
 
+    let user_data = []
+    let user_id = user.id
+    if(loaded) {
+        user_id = user.id
+        user_data = user.attributes
+    }
+
     return(
         <div className={"container"}>
+            <div className={"row pt-4"}>
+                <div className={"col-xs-6 col-sm-6 col-md-3 offset-md-6 text-right"}>
+                    <h5>Olá { user_data.name }!</h5>
+                </div>
+                <div className={"col-xs-6 col-sm-6 col-md-3 text-right"}>
+                    <Button className="btn btn-danger" onClick={handleSignOut}>
+                        <i className="fas fa-sign-out-alt"></i> Sair
+                    </Button>
+                </div>
+            </div>
             <div className={"row pt-4"}>
                 <div className={"col-xs-12 col-sm-12 col-md-10 offset-md-1"}>
                     <h2 className={"pb-3"}>Agenda da Sala de Reunião - { today.getFullYear() }</h2>
@@ -157,11 +234,6 @@ const Schedules = () => {
                 <div className="col-xs-4 col-sm-4 col-md-2 pb-2">
                     <Button className="btn btn-info" onClick={handleSetListModal}>
                         <i className="fas fa-table"></i> Ver Legenda
-                    </Button>
-                </div>
-                <div className="col-xs-4 col-sm-4 col-md-2 offset-md-6 offset-xs-1 offset-sm-1 pb-2">
-                    <Button className="btn btn-danger" onClick={handleSignOut}>
-                        <i className="fas fa-sign-out-alt"></i> Sair
                     </Button>
                 </div>
             </div>
@@ -179,10 +251,14 @@ const Schedules = () => {
                             </tr>
                         </thead>
                         <Schedule
+                            loaded={loaded}
                             handleSchedulerButton={handleSchedulerButton}
                             handleCancelModal={handleCancelModal}
                             handleInfoModal={handleInfoModal}
                             handleSetCheckModal={handleSetCheckModal}
+                            schedules={schedules}
+                            current_user={user}
+                            current_user_id={user_id}
                         />
                     </table>
                 </div>

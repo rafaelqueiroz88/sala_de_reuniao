@@ -16,7 +16,7 @@ const CancelModal = (props) => {
             </Modal.Body>
             <Modal.Footer>
                 <Button className="btn btn-danger">
-                    <i class="far fa-trash-alt"></i> Apagar
+                    <i className="far fa-trash-alt"></i> Apagar
                 </Button>
                 <Button className="btn btn-primary" onClick={props.handleCloseButton}>
                     <i className="far fa-times-circle"></i> Fechar
