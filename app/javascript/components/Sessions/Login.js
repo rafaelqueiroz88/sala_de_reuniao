@@ -3,6 +3,7 @@ import axios from 'axios'
 import { Link, useHistory } from 'react-router-dom'
 
 import AccountModal from './Sessions/AccountModal'
+import ErrorModal from './Sessions/ErrorModal'
 
 const Login = () => {
 
@@ -12,20 +13,24 @@ const Login = () => {
         history.push('/agenda')
 
     const [modal, setModal] = useState(false)
+    const [error, setError] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
+    const [password, setPassword] = useState(false)
     const [newUser, setNewUser] = useState([])
     const [authUser, setAuthUser] = useState([])
-
-    /**
-     * handle form changes for new user modal
-     */
-    const handleAuthChange = (e) => {
-        setAuthUser(Object.assign({}, authUser, {[e.target.name]: e.target.value}))
-    }
 
     /**
      * handle form changes for user auth
      */
     const handleNewChange = (e) => {
+        if(e.target.name == 'confirmPassword') {
+            if(document.getElementById("password").value == document.getElementById("confirmPassword").value) {
+                setPassword(true)
+            }
+            else {
+                setPassword(false)   
+            }
+        }
         setNewUser(Object.assign({}, newUser, {[e.target.name]: e.target.value}))
     }
 
@@ -37,9 +42,14 @@ const Login = () => {
 
         axios.post('/api/v1/login', authUser)
             .then(response => {
-                localStorage.setItem('token', response.data.token)
-                localStorage.setItem('slug', response.data.user.slug)
-                history.push('/agenda')
+                if(response.status == 200) {                    
+                    localStorage.setItem('token', response.data.token)
+                    localStorage.setItem('slug', response.data.user.slug)
+                    history.push('/agenda')
+                }
+                else if(response.status == 208) {
+                    setError(true)
+                }
             })
             .catch(response => {
                 console.log(response)
@@ -47,20 +57,37 @@ const Login = () => {
     }
 
     const newAccountSubmit = (e) => {
+
         e.preventDefault()
 
         const csrfToken = document.querySelector('[name=csrf-token]').content
         axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
 
-        axios.post('/api/v1/users', newUser)
-            .then(response => {
-                localStorage.setItem('token', response.data.token)
-                localStorage.setItem('slug', response.data.user.slug)
-                history.push('/agenda')
-            })
-            .catch(response => {
-                console.log(response)
-            })
+        if(password) {
+            axios.post('/api/v1/users', newUser)
+                .then(response => {
+                    if(response.status == 200 && !response.data.error) {
+                        localStorage.setItem('token', response.data.token)
+                        localStorage.setItem('slug', response.data.user.slug)
+                        history.push('/agenda')
+                    }
+                    else if (response.data.error) {
+                        setErrorMessage('Este e-mail já foi utilizado')
+                    }
+                })
+                .catch(response => {
+                    console.log(response)
+                })
+        } else {
+            setErrorMessage('As senhas não conferem!')
+        }        
+    }
+
+    /**
+     * handle form changes for new user modal
+     */
+     const handleAuthChange = (e) => {
+        setAuthUser(Object.assign({}, authUser, {[e.target.name]: e.target.value}))
     }
 
     const handleModal = (e) => {
@@ -70,10 +97,12 @@ const Login = () => {
 
     const handleModalClose = () => {
         setModal(false)
+        setError(false)
     }
 
     const handleCloseButton = () => {
         setModal(false)
+        setError(false)
     }
 
     return (
@@ -118,6 +147,14 @@ const Login = () => {
                 handleModalClose={handleModalClose}
                 handleCloseButton={handleCloseButton}
                 newAccountSubmit={newAccountSubmit}
+                errorMessage={errorMessage}
+            />
+
+            <ErrorModal
+                handleModalClose={handleModalClose}
+                handleCloseButton={handleCloseButton}
+                password={password}
+                error={error}
             />
 
         </div>
