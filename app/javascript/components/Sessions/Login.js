@@ -24,7 +24,7 @@ const Login = () => {
      */
     const handleNewChange = (e) => {
         if(e.target.name == 'confirmPassword') {
-            if(document.getElementById("password").value == document.getElementById("confirmPassword").value) {
+            if(document.getElementById("newPassword").value == document.getElementById("confirmPassword").value) {
                 setPassword(true)
             }
             else {
@@ -88,6 +88,7 @@ const Login = () => {
      */
      const handleAuthChange = (e) => {
         setAuthUser(Object.assign({}, authUser, {[e.target.name]: e.target.value}))
+        console.log(authUser)
     }
 
     const handleModal = (e) => {
