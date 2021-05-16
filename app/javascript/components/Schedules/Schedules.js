@@ -214,7 +214,7 @@ const Schedules = (props) => {
         const csrfToken = document.querySelector('[name=csrf-token]').content
         axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
 
-        axios.post('/api/v1/schedules', schedules)
+        axios.post('/api/v1/schedules', schedules, config)
             .then(response => {
                 history.go(0)
             })

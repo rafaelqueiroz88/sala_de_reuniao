@@ -10,7 +10,7 @@ module Api
             def index
                 # schedules = Schedule.all
                 schedules = Schedule.search_week
-                render json: ScheduleSerializer.new(schedules, options).serialized_json
+                render json: ScheduleSerializer.new(schedules, options).serialized_json, status: 200
             end
 
             # @get: /api/v1/schedules/:slug
@@ -23,7 +23,7 @@ module Api
             def create
                 schedule = Schedule.new(schedule_params)
                 if schedule.save
-                    render json: ScheduleSerializer.new(schedule).serialized_json
+                    render json: ScheduleSerializer.new(schedule).serialized_json, status: 200
                 else
                     render json: { error: schedule.errors.messages }, status: 422
                 end

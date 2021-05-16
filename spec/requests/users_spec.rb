@@ -45,7 +45,7 @@ RSpec.describe "Users", type: :request do
       user = User.new(invalid_attributes_email)
       post "#{url}/api/v1/login"
 
-      expect(response).to have_http_status(:error)
+      expect(response).to have_http_status(208)
     end
   end
 
@@ -55,7 +55,7 @@ RSpec.describe "Users", type: :request do
       user = User.new(invalid_attributes)
       post "#{url}/api/v1/login"
 
-      expect(response).to have_http_status(:error)
+      expect(response).to have_http_status(208)
     end
   end
 end
