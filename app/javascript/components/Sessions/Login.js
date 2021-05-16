@@ -28,7 +28,6 @@ const Login = () => {
         else {
             setNewUser(Object.assign({}, newUser, {[e.target.name]: e.target.value}))
         }
-        console.log(newUser)        
     }
 
     const authSubmit = (e) => {
