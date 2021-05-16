@@ -31,13 +31,7 @@ const AccountModal = (props) => {
                     <div className="form-group row">
                         <label htmlFor="password" className={"col-xs-3 col-sm-3 col-md-2 col-form-label"}>Senha: </label>
                         <div className="col-xs-7 col-sm-7 col-md-6">
-                            <input type="password" onChange={props.handleNewChange} className="form-control" name="password" id="newPassword" placeholder="******" required />
-                        </div>
-                    </div>
-                    <div className="form-group row">
-                        <label htmlFor="confirmPassword" className={"col-xs-3 col-sm-3 col-md-2 col-form-label"}>Confirmar: </label>
-                        <div className="col-xs-7 col-sm-7 col-md-6">
-                            <input type="password" onChange={props.handleNewChange} className="form-control" name="confirmPassword" id="confirmPassword" placeholder="******" required />
+                            <input type="password" onChange={props.handleNewChange} className="form-control" name="new_password" id="new_password" placeholder="******" required />
                         </div>
                     </div>
                     <div className="row">

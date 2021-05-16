@@ -15,7 +15,6 @@ const Login = () => {
     const [modal, setModal] = useState(false)
     const [error, setError] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
-    const [password, setPassword] = useState(false)
     const [newUser, setNewUser] = useState([])
     const [authUser, setAuthUser] = useState([])
 
@@ -23,15 +22,13 @@ const Login = () => {
      * handle form changes for user auth
      */
     const handleNewChange = (e) => {
-        if(e.target.name == 'confirmPassword') {
-            if(document.getElementById("newPassword").value == document.getElementById("confirmPassword").value) {
-                setPassword(true)
-            }
-            else {
-                setPassword(false)   
-            }
+        if(e.target.name == 'new_password') {
+            setNewUser(Object.assign({}, newUser, {['password']: e.target.value}))
         }
-        setNewUser(Object.assign({}, newUser, {[e.target.name]: e.target.value}))
+        else {
+            setNewUser(Object.assign({}, newUser, {[e.target.name]: e.target.value}))
+        }
+        console.log(newUser)        
     }
 
     const authSubmit = (e) => {
@@ -63,24 +60,20 @@ const Login = () => {
         const csrfToken = document.querySelector('[name=csrf-token]').content
         axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
 
-        if(password) {
-            axios.post('/api/v1/users', newUser)
-                .then(response => {
-                    if(response.status == 200 && !response.data.error) {
-                        localStorage.setItem('token', response.data.token)
-                        localStorage.setItem('slug', response.data.user.slug)
-                        history.push('/agenda')
-                    }
-                    else if (response.data.error) {
-                        setErrorMessage('Este e-mail já foi utilizado')
-                    }
-                })
-                .catch(response => {
-                    console.log(response)
-                })
-        } else {
-            setErrorMessage('As senhas não conferem!')
-        }        
+        axios.post('/api/v1/users', newUser)
+            .then(response => {
+                if(response.status == 200 && !response.data.error) {
+                    localStorage.setItem('token', response.data.token)
+                    localStorage.setItem('slug', response.data.user.slug)
+                    history.push('/agenda')
+                }
+                else if (response.data.error) {
+                    setErrorMessage('Este e-mail já foi utilizado')
+                }
+            })
+            .catch(response => {
+                console.log(response)
+            })
     }
 
     /**
@@ -88,7 +81,6 @@ const Login = () => {
      */
      const handleAuthChange = (e) => {
         setAuthUser(Object.assign({}, authUser, {[e.target.name]: e.target.value}))
-        console.log(authUser)
     }
 
     const handleModal = (e) => {
@@ -154,7 +146,6 @@ const Login = () => {
             <ErrorModal
                 handleModalClose={handleModalClose}
                 handleCloseButton={handleCloseButton}
-                password={password}
                 error={error}
             />
 
