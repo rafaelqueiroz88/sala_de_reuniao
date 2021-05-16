@@ -18,30 +18,35 @@ module Api
                 render json: UserSerializer.new(user, options).serialized_json
             end
 
-            # @post: /api/v1/
+            # @post: /api/v1/login
             def login
                 @user = User.find_by(email: params[:email])
 
                 if @user && @user.authenticate(params[:password])
                     token = encode_token({user_id: @user.id})
-                    render json: {user: @user, token: token}
+                    render json: {user: @user, token: token}, status: 200
                 else
-                    render json: {error: "Invalid e-mail or password"}
+                    render json: { error: "Invalid e-mail or password" }, status: 208
                 end
             end
 
+            # @get: /api/v1/auto_login
             def auto_login
                 render json: @user
             end
 
             # @post: /api/v1/users/:slug
             def create
-                @user = User.create(user_params)
+                @user = User.new(user_params)
                 if @user.valid?
-                    token = encode_token({user_id: @user.id})
-                    render json: { user: @user, token: token }
+                    if @user.save
+                        token = encode_token({user_id: @user.id})
+                        render json: { user: @user, token: token }, status: 200
+                    else
+                        render json: { error: @user.errors.messages }, status: 422
+                    end                    
                 else
-                    render json: { error: "Invalid username or password" }
+                    render json: { error: @user.errors.messages }
                 end
             end
 
