@@ -17,7 +17,7 @@ class SenderWorker
                 address: 'smtp.gmail.com',
                 port: '587',
                 user_name: 'rafael.qdc88@gmail.com',
-                password: 'ExiaGundam00',
+                password: '###userpasswordhere###',
                 authentication: :plain,
                 domain: 'mail.google.com'
             }
