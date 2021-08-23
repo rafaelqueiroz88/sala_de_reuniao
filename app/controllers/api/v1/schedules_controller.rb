@@ -4,7 +4,7 @@ module Api
 
             protect_from_forgery with: :null_session
 
-            # before_action :authorized
+            before_action :authorized
 
             # @get: /api/v1/schedules.json
             def index
