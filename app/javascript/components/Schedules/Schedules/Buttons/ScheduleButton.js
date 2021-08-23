@@ -32,37 +32,81 @@ const ScheduleButton = (props) => {
     let modal_text = ''
     let modal_title = ''
     let slug = ''
-    if(props.has_data) {
+ 
+    if(props.day < now.getDate()) {
 
-        // console.log(props)
-        
-        if(props.day < now.getDate()) {
+        status = 0
 
-            status = 0
+        while(i < props.scheduled_date.length) {
 
-            while(i < props.scheduled_date.length) {
+            let formated = props.scheduled_date[i].split('-')
+            let formated_time = props.scheduled_time[i].split(':')
 
-                // console.log(props.schedules[i])
+            if(formated[2] == props.day) {
+                if(formated_time[0] == props.hour) {
+                    modal_text = props.schedules[i].attributes.title
+                    status = 2
+                }
+                else {
+                    status = 0
+                }
+            }
 
-                let formated = props.scheduled_date[i].split('-')
-                let formated_time = props.scheduled_time[i].split(':')
+            i++
+        }
+    }
+    else if(props.day > now.getDate()) {
 
-                if(formated[2] == props.day) {
-                    if(formated_time[0] == props.hour) {
-                        modal_text = props.schedules[i].attributes.title
-                        status = 2
+        status = 1
+
+        while(i < props.scheduled_date.length) {
+
+            let formated = props.scheduled_date[i].split('-')
+            let formated_time = props.scheduled_time[i].split(':')
+
+            if(formated[2] == props.day) {
+                if(formated_time[0] == props.hour) {
+                    if(props.current_user_id == props.schedules[i].attributes.user_id) {
+                        status = 3
                     }
                     else {
-                        status = 0
+                        status = 4
                     }
                 }
-
-                i++
             }
-        }
-        else if(props.day > now.getDate()) {
 
-            status = 1
+            i++
+        }
+    }
+    else if(props.day == now.getDate()) {
+
+        status = 1
+
+        if(props.hour < now.getHours()) {
+
+            if(props.scheduled_date.length == 0) {
+                status = 0
+            }
+            else {
+                while(i < props.scheduled_date.length) {
+
+                    let formated = props.scheduled_date[i].split('-')
+                    let formated_time = props.scheduled_time[i].split(':')
+    
+                    if(formated[2] == props.day) {
+                        if(formated_time[0] == props.hour) {
+                            status = 2
+                        }
+                        else {
+                            status = 0
+                        }
+                    }
+    
+                    i++
+                }
+            }            
+        }
+        else if(props.hour > now.getHours()) {
 
             while(i < props.scheduled_date.length) {
 
@@ -71,10 +115,16 @@ const ScheduleButton = (props) => {
 
                 if(formated[2] == props.day) {
                     if(formated_time[0] == props.hour) {
+                        
                         if(props.current_user_id == props.schedules[i].attributes.user_id) {
+                            modal_title = props.schedules[i].attributes.title
+                            modal_text = props.schedules[i].attributes.description
+                            slug = props.schedules[i].attributes.slug
                             status = 3
                         }
                         else {
+                            modal_title = props.schedules[i].attributes.title
+                            modal_text = props.schedules[i].attributes.description
                             status = 4
                         }
                     }
@@ -83,12 +133,12 @@ const ScheduleButton = (props) => {
                 i++
             }
         }
-        else if(props.day == now.getDate()) {
-
-            status = 1
-
-            if(props.hour < now.getHours()) {
-
+        else if(props.hour == now.getHours()) {
+            
+            if(props.scheduled_date.length == 0) {
+                status = 0
+            }
+            else {
                 while(i < props.scheduled_date.length) {
 
                     let formated = props.scheduled_date[i].split('-')
@@ -105,54 +155,8 @@ const ScheduleButton = (props) => {
     
                     i++
                 }
-            }
-            else if(props.hour > now.getHours()) {
-
-                while(i < props.scheduled_date.length) {
-
-                    let formated = props.scheduled_date[i].split('-')
-                    let formated_time = props.scheduled_time[i].split(':')
-    
-                    if(formated[2] == props.day) {
-                        if(formated_time[0] == props.hour) {
-                            
-                            if(props.current_user_id == props.schedules[i].attributes.user_id) {
-                                modal_title = props.schedules[i].attributes.title
-                                modal_text = props.schedules[i].attributes.description
-                                slug = props.schedules[i].attributes.slug
-                                status = 3
-                            }
-                            else {
-                                modal_title = props.schedules[i].attributes.title
-                                modal_text = props.schedules[i].attributes.description
-                                status = 4
-                            }
-                        }
-                    }
-    
-                    i++
-                }
-            }
-            else if(props.hour == now.getHours()) {
-                
-                while(i < props.scheduled_date.length) {
-
-                    let formated = props.scheduled_date[i].split('-')
-                    let formated_time = props.scheduled_time[i].split(':')
-    
-                    if(formated[2] == props.day) {
-                        if(formated_time[0] == props.hour) {
-                            status = 2
-                        }
-                        else {
-                            status = 0
-                        }
-                    }
-    
-                    i++
-                }
-            }           
-        }
+            }            
+        }           
     }
 
     /**

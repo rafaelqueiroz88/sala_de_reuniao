@@ -8,6 +8,7 @@ const Week = (props) => {
     let scheduled_date = []
     let scheduled_time = []
     let i = 0
+
     if(props.schedules.length > 0) {
         has_data = true
         while(i < props.schedules.length) {

@@ -4,11 +4,10 @@ module Api
 
             protect_from_forgery with: :null_session
 
-            before_action :authorized
+            # before_action :authorized
 
             # @get: /api/v1/schedules.json
             def index
-                # schedules = Schedule.all
                 schedules = Schedule.search_week
                 render json: ScheduleSerializer.new(schedules, options).serialized_json, status: 200
             end
@@ -22,8 +21,11 @@ module Api
             # @post: /api/v1/schedules
             def create
                 schedule = Schedule.new(schedule_params)
+                email = User.find(params[:user_id]).email
                 if schedule.save
-                    render json: ScheduleSerializer.new(schedule).serialized_json, status: 200
+                    sender = SenderWorker.new
+                    sender.perform(email)
+                    render json: ScheduleSerializer.new(schedule).serialized_json
                 else
                     render json: { error: schedule.errors.messages }, status: 422
                 end
@@ -32,20 +34,28 @@ module Api
             # @patch: /api/v1/schedules/:slug
             def update
                 schedule = Schedule.find_by(slug: params[:slug])
-                if schedule.update(schedule_params)
-                    render json: ScheduleSerializer.new(schedule).serialized_json
+                if schedule.user_id != params[:user_id]
+                    render json: { error: "Only schedule owner can update this register" }
                 else
-                    render json: { error: schedule.errors.messages }, status: 422
+                    if schedule.update(schedule_params)
+                        render json: ScheduleSerializer.new(schedule).serialized_json
+                    else
+                        render json: { error: schedule.errors.messages }, status: 422
+                    end
                 end
             end
 
             # @delete: /api/v1/schedules/:slug
             def destroy
                 schedule = Schedule.find_by(slug: params[:slug])
-                if schedule.delete
-                    head :no_content
+                if schedule.user_id != params[:user_id]
+                    render json: { error: "Only schedule owner can delete this register" }
                 else
-                    render json: { error: schedule.errors.messages }, status: 422
+                    if schedule.delete
+                        head :no_content
+                    else
+                        render json: { error: schedule.errors.messages }, status: 422
+                    end
                 end
             end
 

@@ -8,6 +8,9 @@ Rails.application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
+  # SETUP for ngrok (local usage)
+  # config.hosts << "db1a-187-38-62-99.ngrok.io"
+
   # Do not eager load code on boot.
   config.eager_load = false
 

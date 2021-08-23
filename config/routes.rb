@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  
+
+  # setup for sidekiq
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
+
   root 'pages#index'
 
   namespace :api do
