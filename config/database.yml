@@ -1,31 +1,22 @@
-# CONFIG FOR HEROKU
-# default: &default
-#   adapter: postgresql
-#   encoding: unicode
-#   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-#   host: <%= ENV['DATABASE_URL'] %>
-
 default: &default
   adapter: postgresql
   encoding: unicode
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: sala_de_reuniao_development
   host: db
   user: postgres
   password: nopass
   port: 5432
 
-development:
-  <<: *default
-  database: sala_de_reuniao_development
-
 test:
   <<: *default
   database: sala_de_reuniao_test
 
-# production:
-#   <<: *default
-#   database: sala_de_reuniao_production
-#   username: postgresql
-#   password: <%= ENV['SALA_DE_REUNIAO_DATABASE_PASSWORD'] %>
+production:
+  <<: *default
+  database: <%= ENV['DATABASE_URL'] %>
